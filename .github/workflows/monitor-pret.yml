@@ -1,0 +1,33 @@
+name: monitor-pret
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Verifica pretul
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          # TARGET_PRICE: "3500"
+        run: python monitor_pret.py
+      - name: Salveaza pretul
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pret_state.json
+          git commit -m "update pret [skip ci]" || echo "nimic de comis"
+          git push
