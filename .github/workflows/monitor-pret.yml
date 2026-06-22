@@ -19,7 +19,7 @@ jobs:
       - run: pip install requests
       - name: Verifica pretul
         env:
-          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC_PRET }}
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           # TARGET_PRICE: "3500"
